@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "net.h"
 #include <stdio.h>
 #include <stdlib.h>
