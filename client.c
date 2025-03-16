@@ -1,12 +1,10 @@
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <netdb.h>
 #include <unistd.h>
 #include <string.h>
 
-#define PORT 3737  // Changed port to match the server
-
+#define PORT 2829 // Changed port number
 #define MIN_ARGS 2
 #define MAX_ARGS 2
 #define SERVER_ARG_IDX 1
@@ -32,17 +30,29 @@ void send_request(int fd)
    char *line = NULL;
    size_t size;
    ssize_t num;
-   char buffer[1024];
 
    while ((num = getline(&line, &size, stdin)) >= 0)
    {
-      write(fd, line, num);  // Send input to server
-
-      ssize_t received = read(fd, buffer, sizeof(buffer) - 1);
-      if (received > 0)
+      // Remove trailing newline
+      size_t len = strlen(line);
+      if (len > 0 && line[len - 1] == '\n')
       {
-         buffer[received] = '\0';  // Null-terminate the received data
-         printf("Echo from server: %s", buffer);
+         line[len - 1] = '\0';
+      }
+
+      // Construct the HTTP GET request
+      char request[1024]; // Increased buffer size
+      snprintf(request, sizeof(request), "GET %s\n", line); // Added GET and newline
+
+      write(fd, request, strlen(request));
+
+      // Read and print the response from the server
+      char buffer[1024];
+      ssize_t bytes_read;
+      while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
+      {
+         // null termination necessary or not?
+         write(STDOUT_FILENO, buffer, bytes_read);
       }
    }
 
