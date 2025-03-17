@@ -83,7 +83,7 @@ void handle_request(int client_fd)
    free(line);
    fclose(network);
    close(client_fd); // Close connection after handling request
-   printf("\nConnection closed\n"); // Print connection closed message
+   printf("Connection closed\n"); // Print connection closed message
    exit(0); // Ensure the child process exits
 }
 
