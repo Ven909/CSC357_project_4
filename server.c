@@ -61,6 +61,7 @@ void handle_request(int client_fd)
                size_t file_num;
                while ((file_num = fread(file_buffer, 1, sizeof(file_buffer), file)) > 0)
                {
+                  printf("%s", file_buffer);
                   write(client_fd, file_buffer, file_num);
                }
                fclose(file);
@@ -105,7 +106,8 @@ void run_service(int fd)
    while (1)
    {
       int client_fd = accept_connection(fd);
-      if (client_fd != -1) {
+      if (client_fd != -1)
+      {
          printf("Connection established\n");
 
          // Fork a child process to handle the client request
@@ -126,6 +128,7 @@ void run_service(int fd)
          {
             perror("fork failed");
          }
+         printf("Connection closed\n");
       }
    }
 }
