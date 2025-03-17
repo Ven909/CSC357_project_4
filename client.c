@@ -54,6 +54,7 @@ void send_request(int fd)
          write(STDOUT_FILENO, buffer, bytes_read);
       }
    }
+   exit(0);
 }
 
 int connect_to_server(struct hostent *host_entry)
