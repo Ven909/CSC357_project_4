@@ -6,7 +6,7 @@
 #include <string.h>
 
 #define PORT 2829 // Changed port number
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 1024   // Buffer size for reading files
 
 #define MIN_ARGS 2
 #define MAX_ARGS 2
@@ -18,40 +18,44 @@ void validate_arguments(int argc, char *argv[])
 {
     if (argc == 0)
     {
-        fprintf(stderr, USAGE_STRING, "client");
-        exit(EXIT_FAILURE);
+      fprintf(stderr, USAGE_STRING, "client");
+      exit(EXIT_FAILURE);
     }
     else if (argc < MIN_ARGS || argc > MAX_ARGS)
     {
-        fprintf(stderr, USAGE_STRING, argv[0]);
-        exit(EXIT_FAILURE);
+      fprintf(stderr, USAGE_STRING, argv[0]);
+      exit(EXIT_FAILURE);
     }
 }
 
 // Function to send GET request and read response
 void send_request(int fd) 
 {
-   char request[BUFFER_SIZE];
+   char request[BUFFER_SIZE]; // Buffer to store request
 
+   // Read request from stdin
    while (fgets(request, sizeof(request), stdin) != NULL) 
    {
-      size_t len = strlen(request);
+      size_t len = strlen(request); // Get length of request
       
       // Ensure request has a trailing newline before sending
       if (len > 0 && request[len - 1] != '\n')
       {
-         request[len] = '\n';
-         request[len + 1] = '\0';
+         request[len] = '\n';       // Add newline to request
+         request[len + 1] = '\0';   // Add null terminator
       }
 
+      // Send request to server
       write(fd, request, strlen(request));
 
       // Read and print response
-      char buffer[BUFFER_SIZE];
-      ssize_t bytes_read;
+      char buffer[BUFFER_SIZE];  // Buffer to store response
+      ssize_t bytes_read;        // Number of bytes read
+      
+      // Read response from server
       while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
       {
-         write(STDOUT_FILENO, buffer, bytes_read);
+         write(STDOUT_FILENO, buffer, bytes_read); // Print response to stdout
       }
    }
 }
