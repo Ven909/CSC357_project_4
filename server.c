@@ -61,11 +61,10 @@ void handle_request(int client_fd)
                size_t file_num;
                while ((file_num = fread(file_buffer, 1, sizeof(file_buffer), file)) > 0)
                {
-                  printf("%s", file_buffer);
                   write(client_fd, file_buffer, file_num);
                }
                fclose(file);
-            } 
+            }
             else
             {
                char *error_message = "ERROR: File Not Found\n";
@@ -117,6 +116,7 @@ void run_service(int fd)
             // Child process
             close(fd); // Close server socket in child
             handle_request(client_fd);
+            printf("Connection closed\n");
             exit(0); // Ensure child terminates
          }
          else if (pid > 0)
@@ -128,7 +128,6 @@ void run_service(int fd)
          {
             perror("fork failed");
          }
-         printf("Connection closed\n");
       }
    }
 }
