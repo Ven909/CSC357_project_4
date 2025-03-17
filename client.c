@@ -6,6 +6,8 @@
 #include <string.h>
 
 #define PORT 2829 // Changed port number
+#define BUFFER_SIZE 1024
+
 #define MIN_ARGS 2
 #define MAX_ARGS 2
 #define SERVER_ARG_IDX 1
@@ -26,38 +28,32 @@ void validate_arguments(int argc, char *argv[])
     }
 }
 
-void send_request(int fd)
+// Function to send GET request and read response
+void send_request(int fd) 
 {
-   char *line = NULL;
-   size_t size;
-   ssize_t num;
+   char request[BUFFER_SIZE];
 
-   while ((num = getline(&line, &size, stdin)) >= 0)
+   while (fgets(request, sizeof(request), stdin) != NULL) 
    {
-      // Remove trailing newline
-      size_t len = strlen(line);
-      if (len > 0 && line[len - 1] == '\n')
+      size_t len = strlen(request);
+      
+      // Ensure request has a trailing newline before sending
+      if (len > 0 && request[len - 1] != '\n')
       {
-         line[len - 1] = '\0';
+         request[len] = '\n';
+         request[len + 1] = '\0';
       }
-
-      // Construct the HTTP GET request
-      char request[1024]; // Increased buffer size
-      snprintf(request, sizeof(request), "GET %s\n", line); // Added GET and newline
 
       write(fd, request, strlen(request));
 
-      // Read and print the response from the server
-      char buffer[1024];
+      // Read and print response
+      char buffer[BUFFER_SIZE];
       ssize_t bytes_read;
       while ((bytes_read = read(fd, buffer, sizeof(buffer))) > 0)
       {
-         // null termination necessary or not?
          write(STDOUT_FILENO, buffer, bytes_read);
       }
    }
-
-   free(line);
 }
 
 int connect_to_server(struct hostent *host_entry)
