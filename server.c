@@ -62,7 +62,7 @@ void handle_request(int client_fd)
                while ((file_num = fread(file_buffer, 1, sizeof(file_buffer), file)) > 0)
                {
                   write(client_fd, file_buffer, file_num);
-                  fwrite(file_buffer, 1, file_num, stdout); // Print to stdout
+                  write(STDOUT_FILENO, file_buffer, file_num); // Print to stdout
                }
                fclose(file);
             }
