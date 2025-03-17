@@ -83,6 +83,7 @@ void handle_request(int client_fd)
    free(line);
    fclose(network);
    close(client_fd); // Close connection after handling request
+   printf("\nConnection closed\n"); // Print connection closed message
    exit(0); // Ensure the child process exits
 }
 
@@ -116,7 +117,6 @@ void run_service(int fd)
             // Child process
             close(fd); // Close server socket in child
             handle_request(client_fd);
-            printf("Connection closed\n");
             exit(0); // Ensure child terminates
          }
          else if (pid > 0)
