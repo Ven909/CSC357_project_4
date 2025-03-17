@@ -8,7 +8,7 @@
 #include <sys/wait.h>
 #include <signal.h>
 
-#define PORT 4000 // Updated port number
+#define PORT 2829 // Updated port number
 #define BUFFER_SIZE 1024
 
 // Signal handler for SIGCHLD
