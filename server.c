@@ -9,7 +9,7 @@
 #include <signal.h>
 
 #define PORT 2829 // Updated port number
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 1024   // Buffer size for reading files
 
 // Signal handler for SIGCHLD
 void sigchld_handler(int s)
@@ -21,7 +21,7 @@ void sigchld_handler(int s)
 // Function to handle client requests
 void handle_request(int client_fd)
 {
-   FILE *network = fdopen(client_fd, "r+");
+   FILE *network = fdopen(client_fd, "r");   
    char *line = NULL;
    size_t size;
    ssize_t num;
