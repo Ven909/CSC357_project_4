@@ -34,7 +34,7 @@ void send_request(int fd)
    char request[BUFFER_SIZE]; // Buffer to store request
 
    // Read request from stdin
-   while (fgets(request, sizeof(request), stdin) != NULL) 
+   if(fgets(request, sizeof(request), stdin) != NULL) 
    {
       size_t len = strlen(request); // Get length of request
       
