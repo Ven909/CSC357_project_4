@@ -53,6 +53,11 @@ void handle_request(int client_fd)
             {
                char error[] = "ERROR: Invalid Request\n";   // Error message
                write(client_fd, error, strlen(error));   // Send error message to client
+               free(line);
+               fclose(network);
+               close(client_fd);
+               printf("Connection closed\n");
+               exit(0);
             }  
             
             // Remove trailing newline
