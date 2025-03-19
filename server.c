@@ -48,6 +48,13 @@ void handle_request(int client_fd)
          // Check if file name is not NULL
          if (token != NULL)
          {
+            char *extra_token = strtok(NULL, " "); // Check for extra argument
+            if (extra_token != NULL)   // Extra argument detected
+            {
+               char error[] = "ERROR: Invalid Request\n";   // Error message
+               write(client_fd, error, strlen(error));   // Send error message to client
+            }  
+            
             // Remove trailing newline
             size_t len = strlen(token);
             if (len > 0 && token[len - 1] == '\n')
